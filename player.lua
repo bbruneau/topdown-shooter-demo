@@ -1,41 +1,43 @@
 local Sprites = require("sprites")
-local Utils = require("utils")
+local Utils   = require("utils")
 
 local Player = {}
 
 function Player:init()
   Sprites:loader("player", "sprites/player.png")
-  local ps = {}
-  ps.position = {
+  Player.position = {
     x = love.graphics.getWidth() / 2,
     y = love.graphics.getHeight() / 2,
     ox = Sprites.player:getWidth() / 2,
-    oy = Sprites.player:getHeight() / 2
+    oy = Sprites.player:getHeight() / 2,
+    direction = Utils:degToR(-90)
   }
-  ps.direction = Utils:degToR(-90)
-  ps.speed = 150
-
-  Player.state = ps
+  Player.speed = 150
 end
 
 function Player:getDirection()
-  return Utils:degToR(Player.state.direction)
+  return Utils:degToR(Player.position.direction)
 end
 
 function Player:handleMovement(dt)
-  local state = Player.state
   if love.keyboard.isDown("right") then
-    Utils:turnRight(state, 180 * dt)
+    Utils:turnRight(Player.position, 180 * dt)
   end
   if love.keyboard.isDown("left") then
-    Utils:turnLeft(state, 180 * dt)
+    Utils:turnLeft(Player.position, 180 * dt)
   end
   if love.keyboard.isDown("up") then
-    Utils:moveForward(state, state.speed * dt)
+    Utils:moveForward(Player.position, Player.speed * dt)
   end
   if love.keyboard.isDown("down") then
-    Utils:moveBackward(state, state.speed * dt)
+    Utils:moveBackward(Player.position, Player.speed * dt)
   end
+end
+
+function Player:draw()
+  love.graphics.draw(Sprites.player, Player.position.x, Player.position.y,
+    Player:getDirection(), 1, 1,
+    Player.position.ox, Player.position.oy)
 end
 
 return Player

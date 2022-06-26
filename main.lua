@@ -1,10 +1,19 @@
 local Sprites = require("sprites")
-local Player = require("player")
+local Player  = require("player")
+local Zombie  = require("zombie")
 
 function love.load()
+  math.randomseed(os.time())
   Sprites:init()
   Player:init()
+  Zombie:init()
   TIME_ELAPSED = 0
+end
+
+function love.keypressed(key)
+  if key == "z" then
+    Zombie:spawn()
+  end
 end
 
 function love.update(dt)
@@ -14,7 +23,7 @@ end
 
 function love.draw()
   love.graphics.draw(Sprites.background, 0, 0)
-  love.graphics.draw(Sprites.player, Player.state.position.x, Player.state.position.y,
-    Player:getDirection(), 1, 1,
-    Player.state.position.ox, Player.state.position.oy)
+  Player:draw()
+  Zombie:draw()
+  love.graphics.print(Zombie:count(), 10, 10)
 end
