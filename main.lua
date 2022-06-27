@@ -19,6 +19,7 @@ end
 function love.update(dt)
   TIME_ELAPSED = TIME_ELAPSED + dt
   Player:handleMovement(dt)
+  Zombie:move(dt)
 end
 
 function love.draw()

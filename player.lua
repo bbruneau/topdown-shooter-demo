@@ -10,27 +10,36 @@ function Player:init()
     y = love.graphics.getHeight() / 2,
     ox = Sprites.player:getWidth() / 2,
     oy = Sprites.player:getHeight() / 2,
-    direction = Utils:degToR(-90)
+    dir = Utils:degToRad(-90)
   }
   Player.speed = 150
+  Player.turnSpeed = Utils:degToRad(180)
 end
 
 function Player:getDirection()
-  return Utils:degToR(Player.position.direction)
+  return Player.position.dir
+end
+
+function Player:getTurnSpeed(dt)
+  return Player.turnSpeed * dt
 end
 
 function Player:handleMovement(dt)
   if love.keyboard.isDown("right") then
-    Utils:turnRight(Player.position, 180 * dt)
+    Utils:turnRight(Player.position, Player:getTurnSpeed(dt))
   end
   if love.keyboard.isDown("left") then
-    Utils:turnLeft(Player.position, 180 * dt)
+    Utils:turnLeft(Player.position, Player:getTurnSpeed(dt))
   end
   if love.keyboard.isDown("up") then
-    Utils:moveForward(Player.position, Player.speed * dt)
+    local newPos = Utils:moveForward(Player.position.x, Player.position.y, Player.position.dir, Player.speed * dt)
+    Player.position.x = newPos.x
+    Player.position.y = newPos.y
   end
   if love.keyboard.isDown("down") then
-    Utils:moveBackward(Player.position, Player.speed * dt)
+    local newPos = Utils:moveBackward(Player.position.x, Player.position.y, Player.position.dir, Player.speed * dt)
+    Player.position.x = newPos.x
+    Player.position.y = newPos.y
   end
 end
 

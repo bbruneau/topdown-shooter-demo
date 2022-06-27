@@ -1,27 +1,29 @@
-local Utils = {
+local Utils = {}
 
-}
-
-function Utils:degToR(deg)
+function Utils:degToRad(deg)
   return deg * math.pi / 180
 end
 
-function Utils:turnLeft(obj, amount)
-  obj.direction = obj.direction - amount
+function Utils:radToDeg(rad)
+  return rad * 180 / math.pi
 end
 
-function Utils:turnRight(obj, amount)
-  Utils:turnLeft(obj, -amount)
+function Utils:turnLeft(obj, amountInRads)
+  obj.dir = obj.dir - amountInRads
 end
 
-function Utils:moveForward(position, amount)
-  local dirRad = Utils:degToR(position.direction)
-  position.x = position.x + amount * math.cos(dirRad)
-  position.y = position.y + amount * math.sin(dirRad)
+function Utils:turnRight(obj, amountInRads)
+  Utils:turnLeft(obj, -amountInRads)
 end
 
-function Utils:moveBackward(obj, amount)
-  Utils:moveForward(obj, -amount)
+function Utils:moveForward(x, y, dir, amount)
+  local x1 = x + amount * math.cos(dir)
+  local y1 = y + amount * math.sin(dir)
+  return { x = x1, y = y1 }
+end
+
+function Utils:moveBackward(x, y, dir, amount)
+  return Utils:moveForward(x, y, dir, -amount)
 end
 
 function Utils:getClosestEdge(x, y)
@@ -39,7 +41,7 @@ function Utils:randomLocation(sprite, onScreen)
 
   local maxX = love.graphics.getWidth();
   local maxY = love.graphics.getHeight();
-  local dir = Utils:degToR(math.random(0, 359))
+  local dir = Utils:degToRad(math.random(0, 359))
   local ox = 0
   local oy = 0
 
