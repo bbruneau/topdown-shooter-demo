@@ -24,12 +24,14 @@ function Zombie:count()
   return #Zombie.instances
 end
 
+function Zombie:aimAtPlayer(zombie)
+  zombie.position.dir = math.atan2(Player.position.y - zombie.position.y, Player.position.x - zombie.position.x)
+end
+
 function Zombie:move(dt)
   for _i, z in ipairs(Zombie.instances) do
-    z.position.dir = math.atan2(Player.position.y - z.position.y, Player.position.x - z.position.x)
-    local newPos = Utils:moveForward(z.position.x, z.position.y, z.position.dir, z.speed * dt)
-    z.position.x = newPos.x
-    z.position.y = newPos.y
+    Zombie:aimAtPlayer(z)
+    Utils:moveForward(z, dt)
   end
 end
 

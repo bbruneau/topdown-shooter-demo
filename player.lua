@@ -32,14 +32,10 @@ function Player:handleMovement(dt)
     Utils:turnLeft(Player.position, Player:getTurnSpeed(dt))
   end
   if love.keyboard.isDown("up") then
-    local newPos = Utils:moveForward(Player.position.x, Player.position.y, Player.position.dir, Player.speed * dt)
-    Player.position.x = newPos.x
-    Player.position.y = newPos.y
+    Utils:moveForward(Player, dt)
   end
   if love.keyboard.isDown("down") then
-    local newPos = Utils:moveBackward(Player.position.x, Player.position.y, Player.position.dir, Player.speed * dt)
-    Player.position.x = newPos.x
-    Player.position.y = newPos.y
+    Utils:moveBackward(Player, dt)
   end
 end
 

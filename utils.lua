@@ -16,14 +16,14 @@ function Utils:turnRight(obj, amountInRads)
   Utils:turnLeft(obj, -amountInRads)
 end
 
-function Utils:moveForward(x, y, dir, amount)
-  local x1 = x + amount * math.cos(dir)
-  local y1 = y + amount * math.sin(dir)
-  return { x = x1, y = y1 }
+function Utils:moveForward(obj, dt)
+  obj.position.x = obj.position.x + obj.speed * dt * math.cos(obj.position.dir)
+  obj.position.y = obj.position.y + obj.speed * dt * math.sin(obj.position.dir)
 end
 
-function Utils:moveBackward(x, y, dir, amount)
-  return Utils:moveForward(x, y, dir, -amount)
+function Utils:moveBackward(obj, dt)
+  obj.position.x = obj.position.x - obj.speed * dt * math.cos(obj.position.dir)
+  obj.position.y = obj.position.y - obj.speed * dt * math.sin(obj.position.dir)
 end
 
 function Utils:getClosestEdge(x, y)
