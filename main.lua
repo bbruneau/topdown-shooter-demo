@@ -1,3 +1,6 @@
+DEBUG = {}
+
+require("vendor.lovedebug.lovedebug")
 local Sprites = require("sprites")
 local Player  = require("player")
 local Zombie  = require("zombie")

@@ -1,0 +1,3 @@
+[submodule "vendor/lovedebug"]
+	path = vendor/lovedebug
+	url = git@github.com:flamendless/lovedebug.git
