@@ -59,11 +59,24 @@ function Utils:randomLocation(sprite, onScreen)
       oy = oy
     }
   else
-    -- local x = math.random(0, maxX)
-    -- local y = math.random(0, maxY)
+    local edges = { "left", "right", "top", "bottom" }
+    local edge = edges[math.random(1, 4)]
+    local x = math.random(0, maxX)
+    local y = math.random(0, maxY)
+
+    if edge == "left" then
+      x = 0 - ox
+    elseif edge == "right" then
+      x = maxX + ox
+    elseif edge == "top" then
+      y = 0 - oy
+    elseif edge == "bottom" then
+      y = maxY + oy
+    end
+
     return {
-      x = math.random(0, maxX),
-      y = math.random(0 + oy, maxY - oy),
+      x = x,
+      y = y,
       dir = dir,
       ox = ox,
       oy = oy
