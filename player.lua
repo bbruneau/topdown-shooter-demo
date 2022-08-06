@@ -4,14 +4,17 @@ local Utils   = require("utils")
 local Player = {}
 
 function Player:init()
-  Sprites:loader("player", "sprites/player.png")
+  Player = {}
   Player.id = "Player"
-  Player.position = Utils:createObject({
+  Player.position = Utils:createPosition({
     ox = Sprites.player:getWidth() / 2,
     oy = Sprites.player:getHeight() / 2,
   })
   Player.speed = 150
   Player.turnSpeed = Utils:degToRad(180)
+  Player.hitbox = S.trikers.Rectangle(Player.position.x, Player.position.y, Sprites.player:getWidth(),
+    Sprites.player:getHeight(), Player.position.dir);
+  Player.hasDied = false
 end
 
 function Player:getDirection()
@@ -22,12 +25,12 @@ function Player:getTurnSpeed(dt)
   return Player.turnSpeed * dt
 end
 
-function Player:handleMovement(dt)
+function Player:update(dt)
   if love.keyboard.isDown("right") then
-    Utils:turnRight(Player.position, Player:getTurnSpeed(dt))
+    Utils:turnRight(Player, Player:getTurnSpeed(dt))
   end
   if love.keyboard.isDown("left") then
-    Utils:turnLeft(Player.position, Player:getTurnSpeed(dt))
+    Utils:turnLeft(Player, Player:getTurnSpeed(dt))
   end
   if love.keyboard.isDown("up") then
     Utils:moveForward(Player, dt)
@@ -42,6 +45,7 @@ function Player:draw()
     Player:getDirection(), 1, 1,
     Player.position.ox, Player.position.oy
   )
+  if DEBUG.hitbox.player == true then Player.hitbox:draw() end
 end
 
 return Player

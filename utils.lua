@@ -1,16 +1,5 @@
 local Utils = {}
 
-function Utils:createPosition(args)
-  local x, y, ox, oy, dir;
-  if args.x then x = args.x else x = love.graphics.getWidth() / 2 end
-  if args.y then y = args.y else y = love.graphics.getHeight() / 2 end
-  if args.ox then ox = args.ox else ox = 0 end
-  if args.oy then oy = args.oy else oy = 0 end
-  if args.dir then dir = args.dir else dir = 0 end
-
-  return { x = x, y = y, ox = ox, oy = oy, dir = dir }
-end
-
 function Utils:degToRad(deg)
   return deg * math.pi / 180
 end
@@ -20,40 +9,54 @@ function Utils:radToDeg(rad)
 end
 
 function Utils:turnLeft(obj, amountInRads)
-  obj.dir = obj.dir - amountInRads
+  obj.position.dir = obj.position.dir - amountInRads
+  obj.hitbox:rotateTo(obj.position.dir)
 end
 
 function Utils:turnRight(obj, amountInRads)
   Utils:turnLeft(obj, -amountInRads)
 end
 
+local getDelta = function(obj, dt)
+  return obj.speed * dt * math.cos(obj.position.dir), obj.speed * dt * math.sin(obj.position.dir)
+end
+
+local updateHitbox = function(obj)
+  obj.hitbox:translateTo(obj.position.x, obj.position.y)
+end
+
 function Utils:moveForward(obj, dt)
-  obj.position.x = obj.position.x + obj.speed * dt * math.cos(obj.position.dir)
-  obj.position.y = obj.position.y + obj.speed * dt * math.sin(obj.position.dir)
+  local xDelta, yDelta = getDelta(obj, dt)
+  local newX = obj.position.x + xDelta
+  local newY = obj.position.y + yDelta
+
+  if (obj.id == "Player") then
+    -- keep player in play area
+    obj.position.x = Utils:clamp(newX, 10, love.graphics.getWidth() - 10)
+    obj.position.y = Utils:clamp(newY, 10, love.graphics.getHeight() - 10)
+  else
+    obj.position.x = newX
+    obj.position.y = newY
+  end
+  updateHitbox(obj)
 end
 
 function Utils:moveBackward(obj, dt)
-  obj.position.x = obj.position.x - obj.speed * dt * math.cos(obj.position.dir)
-  obj.position.y = obj.position.y - obj.speed * dt * math.sin(obj.position.dir)
+  local xDelta, yDelta = getDelta(obj, dt)
+  obj.position.x = obj.position.x - xDelta
+  obj.position.y = obj.position.y - yDelta
+  updateHitbox(obj)
 end
 
-function Utils:getClosestEdge(x, y)
-  local maxX = love.graphics.getWidth();
-  local maxY = love.graphics.getHeight();
+function Utils:createPosition(args)
+  local x, y, ox, oy, dir;
+  if args.x then x = args.x else x = love.graphics.getWidth() / 2 end
+  if args.y then y = args.y else y = love.graphics.getHeight() / 2 end
+  if args.ox then ox = args.ox else ox = 0 end
+  if args.oy then oy = args.oy else oy = 0 end
+  if args.dir then dir = args.dir else dir = 0 end
 
-  local sides = { top = 0 + y, bottom = maxY - y, left = 0 + x, right = maxX - x }
-
-end
-
-function Utils:createRotatedRectangle(position, w, h, mode)
-
-  if mode == nil then mode = "fill" end
-
-  love.graphics.push()
-  love.graphics.translate(position.x + position.ox, position.y + position.oy)
-  love.graphics.rotate(position.dir)
-  love.graphics.rectangle(mode, -position.ox, -position.oy, w, h)
-  love.graphics.pop()
+  return { x = x, y = y, ox = ox, oy = oy, dir = dir }
 end
 
 function Utils:randomPosition(sprite, onScreen)
@@ -103,6 +106,24 @@ function Utils:randomPosition(sprite, onScreen)
       ox = ox,
       oy = oy
     }
+  end
+end
+
+function Utils:orElse(val, fallback)
+  if val == nil then
+    return fallback
+  else
+    return val
+  end
+end
+
+function Utils:clamp(val, min, max)
+  if val < min then
+    return min
+  elseif val > max then
+    return max
+  else
+    return val
   end
 end
 

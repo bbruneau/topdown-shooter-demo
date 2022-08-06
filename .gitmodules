@@ -1,3 +1,6 @@
 [submodule "vendor/lovedebug"]
 	path = vendor/lovedebug
 	url = git@github.com:flamendless/lovedebug.git
+[submodule "vendor/Strike"]
+	path = vendor/Strike
+	url = git@github.com:Aweptimum/Strike
