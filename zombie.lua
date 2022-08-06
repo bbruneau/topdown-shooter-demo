@@ -11,7 +11,7 @@ end
 
 function Zombie:spawn()
   local zombie = {}
-  zombie.position = Utils:randomLocation(Sprites.zombie, false)
+  zombie.position = Utils:randomPosition(Sprites.zombie, false)
   zombie.position.tostring = function()
     return "(" .. zombie.position.x .. ", " .. zombie.position.y .. ")"
   end

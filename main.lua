@@ -1,12 +1,13 @@
 DEBUG = {}
 
 require("vendor.lovedebug.lovedebug")
+local World   = require "world"
 local Sprites = require("sprites")
 local Player  = require("player")
 local Zombie  = require("zombie")
 
 function love.load()
-  math.randomseed(os.time())
+  World:init()
   Sprites:init()
   Player:init()
   Zombie:init()

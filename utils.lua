@@ -1,5 +1,16 @@
 local Utils = {}
 
+function Utils:createPosition(args)
+  local x, y, ox, oy, dir;
+  if args.x then x = args.x else x = love.graphics.getWidth() / 2 end
+  if args.y then y = args.y else y = love.graphics.getHeight() / 2 end
+  if args.ox then ox = args.ox else ox = 0 end
+  if args.oy then oy = args.oy else oy = 0 end
+  if args.dir then dir = args.dir else dir = 0 end
+
+  return { x = x, y = y, ox = ox, oy = oy, dir = dir }
+end
+
 function Utils:degToRad(deg)
   return deg * math.pi / 180
 end
@@ -34,7 +45,18 @@ function Utils:getClosestEdge(x, y)
 
 end
 
-function Utils:randomLocation(sprite, onScreen)
+function Utils:createRotatedRectangle(position, w, h, mode)
+
+  if mode == nil then mode = "fill" end
+
+  love.graphics.push()
+  love.graphics.translate(position.x + position.ox, position.y + position.oy)
+  love.graphics.rotate(position.dir)
+  love.graphics.rectangle(mode, -position.ox, -position.oy, w, h)
+  love.graphics.pop()
+end
+
+function Utils:randomPosition(sprite, onScreen)
   if onScreen == nil then
     onScreen = true
   end

@@ -5,13 +5,11 @@ local Player = {}
 
 function Player:init()
   Sprites:loader("player", "sprites/player.png")
-  Player.position = {
-    x = love.graphics.getWidth() / 2,
-    y = love.graphics.getHeight() / 2,
+  Player.id = "Player"
+  Player.position = Utils:createObject({
     ox = Sprites.player:getWidth() / 2,
     oy = Sprites.player:getHeight() / 2,
-    dir = Utils:degToRad(-90)
-  }
+  })
   Player.speed = 150
   Player.turnSpeed = Utils:degToRad(180)
 end
@@ -42,7 +40,8 @@ end
 function Player:draw()
   love.graphics.draw(Sprites.player, Player.position.x, Player.position.y,
     Player:getDirection(), 1, 1,
-    Player.position.ox, Player.position.oy)
+    Player.position.ox, Player.position.oy
+  )
 end
 
 return Player
