@@ -1,11 +1,11 @@
 DEBUG = {
-  showDebugger = true,
-  showZombieCount = true,
+  showDebugger = false,
+  showZombieCount = false,
   hitbox = {
-    bullet = true,
-    player = true,
-    world = true,
-    zombie = true,
+    bullet = false,
+    player = false,
+    world = false,
+    zombie = false,
   },
 }
 

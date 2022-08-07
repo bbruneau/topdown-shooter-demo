@@ -5,13 +5,14 @@ local Zombie = require "zombie"
 
 local Game = {}
 
-local w = love.graphics.getWidth() - 2;
-local h = love.graphics.getHeight() - 2;
-local coverOpacity = 0;
+local w = love.graphics.getWidth() - 2
+local h = love.graphics.getHeight() - 2
+local coverOpacity = 0
+
 
 function Game:init()
   math.randomseed(os.time())
-  coverOpacity = 0;
+  coverOpacity = 0
 
   Game.worldHitbox = S.trikers.Collider(
     S.hapes.Edge(1, 1, 1, h),
@@ -46,7 +47,13 @@ function Game:endGame()
   love.graphics.rectangle("fill", 0, 0, w, h)
   love.graphics.setColor(255, 255, 255)
   if coverOpacity == 1 then
-    love.graphics.printf("You died!", 0, h / 2, w, "center")
+    local deathText = "You died!"
+
+    if Zombie:bodyCount() > 0 then
+      deathText = deathText .. " But you took " .. Zombie:bodyCount() .. " of them with you!"
+    end
+
+    love.graphics.printf(deathText, 0, h / 2, w, "center")
     love.graphics.printf("Try again? (y/n)", 0, h / 2 + 20, w, "center")
     function love.keypressed(key)
       if Player.hasDied == true then
@@ -62,6 +69,8 @@ function Game:endGame()
 end
 
 function Game:update(dt)
+  TIME_ELAPSED = TIME_ELAPSED + dt
+
   if Player.hasDied then
     Game:fadeToBlack(dt)
   end
@@ -71,6 +80,8 @@ function Game:update(dt)
       Bullet:destroy(i)
     end
   end
+
+
 end
 
 function Game:draw()
