@@ -21,12 +21,17 @@ local getDelta = function(obj, dt)
   return obj.speed * dt * math.cos(obj.position.dir), obj.speed * dt * math.sin(obj.position.dir)
 end
 
+function Utils:getDelta(direction, distance, dt)
+  return distance * dt * math.cos(direction), distance * dt * math.sin(direction)
+end
+
 local updateHitbox = function(obj)
   obj.hitbox:translateTo(obj.position.x, obj.position.y)
 end
 
 function Utils:moveForward(obj, dt)
-  local xDelta, yDelta = getDelta(obj, dt)
+  -- local xDelta, yDelta = getDelta(obj, dt)
+  local xDelta, yDelta = Utils:getDelta(obj.position.dir, obj.speed, dt)
   local newX = obj.position.x + xDelta
   local newY = obj.position.y + yDelta
 

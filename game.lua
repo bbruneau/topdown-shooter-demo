@@ -22,23 +22,30 @@ function Game:init()
   Player:init()
   Zombie:init()
   TIME_ELAPSED = 0
+
+  function love.keypressed(key)
+    if key == "z" then
+      Zombie:spawn()
+    end
+  end
+
 end
 
 function Game:fadeToBlack(dt)
-  if coverOpacity < 1 and Player.hasDied == true then
+  if coverOpacity < 1 then
     coverOpacity = math.min(coverOpacity + dt, 1)
   end
 end
 
 function Game:endGame()
-  if Player.hasDied then
-    love.graphics.setColor(0, 0, 0, coverOpacity)
-    love.graphics.rectangle("fill", 0, 0, w, h)
-    love.graphics.setColor(255, 255, 255)
-    if coverOpacity == 1 then
-      love.graphics.printf("You died!", 0, h / 2, w, "center")
-      love.graphics.printf("Try again? (y/n)", 0, h / 2 + 20, w, "center")
-      function love.keypressed(key)
+  love.graphics.setColor(0, 0, 0, coverOpacity)
+  love.graphics.rectangle("fill", 0, 0, w, h)
+  love.graphics.setColor(255, 255, 255)
+  if coverOpacity == 1 then
+    love.graphics.printf("You died!", 0, h / 2, w, "center")
+    love.graphics.printf("Try again? (y/n)", 0, h / 2 + 20, w, "center")
+    function love.keypressed(key)
+      if Player.hasDied == true then
         if key == "y" then
           Game:init()
         end
@@ -51,12 +58,16 @@ function Game:endGame()
 end
 
 function Game:update(dt)
-  Game:fadeToBlack(dt)
+  if Player.hasDied then
+    Game:fadeToBlack(dt)
+  end
 end
 
 function Game:draw()
   if DEBUG.hitbox.world == true then Game.worldHitbox:draw() end
-  Game:endGame()
+  if Player.hasDied then
+    Game:endGame()
+  end
 end
 
 return Game

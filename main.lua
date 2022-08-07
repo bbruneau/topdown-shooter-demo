@@ -2,9 +2,9 @@ DEBUG = {
   showDebugger = true,
   showZombieCount = true,
   hitbox = {
-    player = false,
-    world = true,
-    zombie = false,
+    player = true,
+    world = false,
+    zombie = true,
   },
 }
 
@@ -22,12 +22,6 @@ local Zombie  = require "zombie"
 function love.load()
   Sprites:init()
   Game:init()
-end
-
-function love.keypressed(key)
-  if key == "z" then
-    Zombie:spawn()
-  end
 end
 
 function love.update(dt)

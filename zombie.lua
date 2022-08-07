@@ -10,7 +10,7 @@ end
 
 function Zombie:spawn()
   local zombie = {}
-  zombie.position = Utils:randomPosition(Sprites.zombie, true)
+  zombie.position = Utils:randomPosition(Sprites.zombie, false)
   zombie.hitbox = S.trikers.Circle(zombie.position.x, zombie.position.y,
     Sprites.zombie:getWidth() / 2, zombie.position.dir);
   zombie.speed = 50
@@ -28,6 +28,9 @@ end
 
 function Zombie:update(dt)
   for _i, z in ipairs(Zombie.instances) do
+    if S.triking(z.hitbox, Player.hitbox) then
+      Player:kill(z)
+    end
     Zombie:aimAtPlayer(z)
     Utils:moveForward(z, dt)
   end

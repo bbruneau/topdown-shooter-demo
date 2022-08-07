@@ -1,10 +1,9 @@
-local Sprites = require("sprites")
-local Utils   = require("utils")
+local Sprites = require "sprites"
+local Utils   = require "utils"
 
 local Player = {}
 
 function Player:init()
-  Player = {}
   Player.id = "Player"
   Player.position = Utils:createPosition({
     ox = Sprites.player:getWidth() / 2,
@@ -13,8 +12,9 @@ function Player:init()
   Player.speed = 150
   Player.turnSpeed = Utils:degToRad(180)
   Player.hitbox = S.trikers.Rectangle(Player.position.x, Player.position.y, Sprites.player:getWidth(),
-    Sprites.player:getHeight(), Player.position.dir);
+    Sprites.player:getHeight(), Player.position.dir)
   Player.hasDied = false
+  print("@@@", Player.hasDied)
 end
 
 function Player:getDirection()
@@ -25,7 +25,15 @@ function Player:getTurnSpeed(dt)
   return Player.turnSpeed * dt
 end
 
-function Player:update(dt)
+function Player:kill(zombie)
+  if Player.hasDied == false then
+    Player.bloodTimer = 0
+    Player.killDirection = zombie.position.dir
+    Player.hasDied = true
+  end
+end
+
+local handleMovement = function(dt)
   if love.keyboard.isDown("right") then
     Utils:turnRight(Player, Player:getTurnSpeed(dt))
   end
@@ -40,7 +48,30 @@ function Player:update(dt)
   end
 end
 
+
+local animateBlood = function(dt)
+end
+
+function Player:update(dt)
+  if Player.hasDied == true then
+    animateBlood(dt)
+  else
+    handleMovement(dt)
+  end
+
+end
+
+local drawBlood = function()
+  if Player.hasDied == true then
+    love.graphics.draw(Sprites.blood, Player.position.x, Player.position.y,
+      Player.killDirection, -1, -1,
+      Sprites.blood:getHeight() + Sprites.zombie:getWidth(),
+      Sprites.blood:getHeight() / 2)
+  end
+end
+
 function Player:draw()
+  drawBlood()
   love.graphics.draw(Sprites.player, Player.position.x, Player.position.y,
     Player:getDirection(), 1, 1,
     Player.position.ox, Player.position.oy
