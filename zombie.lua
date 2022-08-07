@@ -1,6 +1,6 @@
-local Utils   = require("utils")
-local Sprites = require("sprites")
-local Player  = require("player")
+local Utils   = require "utils"
+local Sprites = require "sprites"
+local Player  = require "player"
 
 local Zombie = {}
 

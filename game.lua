@@ -1,4 +1,5 @@
 -- local Utils = require "utils"
+local Bullet = require "bullet"
 local Player = require "player"
 local Zombie = require "zombie"
 
@@ -21,11 +22,14 @@ function Game:init()
 
   Player:init()
   Zombie:init()
+  Bullet:init()
   TIME_ELAPSED = 0
 
   function love.keypressed(key)
     if key == "z" then
       Zombie:spawn()
+    elseif key == "space" then
+      Player:shoot()
     end
   end
 

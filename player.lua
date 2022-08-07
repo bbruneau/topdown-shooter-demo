@@ -1,3 +1,4 @@
+local Bullet  = require "bullet"
 local Sprites = require "sprites"
 local Utils   = require "utils"
 
@@ -23,6 +24,17 @@ end
 
 function Player:getTurnSpeed(dt)
   return Player.turnSpeed * dt
+end
+
+local SHOT_COOLDOWN = 0
+
+function Player:shoot()
+  if SHOT_COOLDOWN > 0 then
+    return
+  else
+    Bullet:spawn(Player.position.x, Player.position.y, Player.position.dir)
+    SHOT_COOLDOWN = .5
+  end
 end
 
 function Player:kill(zombie)
@@ -57,6 +69,7 @@ function Player:update(dt)
     animateBlood(dt)
   else
     handleMovement(dt)
+    SHOT_COOLDOWN = math.max(SHOT_COOLDOWN - dt, 0)
   end
 
 end
