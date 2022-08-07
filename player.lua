@@ -15,7 +15,6 @@ function Player:init()
   Player.hitbox = S.trikers.Rectangle(Player.position.x, Player.position.y, Sprites.player:getWidth(),
     Sprites.player:getHeight(), Player.position.dir)
   Player.hasDied = false
-  print("@@@", Player.hasDied)
 end
 
 function Player:getDirection()

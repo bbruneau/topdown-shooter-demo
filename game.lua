@@ -65,6 +65,12 @@ function Game:update(dt)
   if Player.hasDied then
     Game:fadeToBlack(dt)
   end
+
+  for i, b in ipairs(Bullet.instances) do
+    if S.triking(b.hitbox, Game.worldHitbox) then
+      Bullet:destroy(i)
+    end
+  end
 end
 
 function Game:draw()

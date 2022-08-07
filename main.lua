@@ -4,7 +4,7 @@ DEBUG = {
   hitbox = {
     bullet = true,
     player = true,
-    world = false,
+    world = true,
     zombie = true,
   },
 }
